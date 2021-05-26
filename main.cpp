@@ -432,14 +432,6 @@ static string myhash(string str){
 
 int main(int argc, char **argv)
 {
-	cout <<myhash("Ella Richardeau")<<endl;
-	//cout<<bintohex("11111111111111111111111111111111")<<endl;
-	/*string str ="1";
-	for(int i=0;i<61;i++){
-		str=str+"1";
-	}
-	cout<<str.length()<<endl;
-	cout<< (bourage("1"))<<endl<<bourage("1").length();
-	*/
+	cout <<myhash("ALL YOU CAN HASH HERE")<<endl;
 	return 0;
 }
