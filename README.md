@@ -7,6 +7,8 @@ Flowchart:
   - Section 1 functions translate each string character into string-wise bit representation
   - Section 3 functions call elementary Section 2 functions (bit rotation, choice function, bitwise-sum,...) to return the input string fingerprint
 
+All Section 2 functions handle string representations of bits! 
+
 ## Section 1 :
 
 
