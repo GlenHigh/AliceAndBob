@@ -5,6 +5,12 @@
 #include <string>
 using namespace std;
 
+/*=======================
+	SECTION 1 :
+=======================*/
+
+//tobit function converts any string text into it's string-wise bit representation:
+// "ABC" returns "010000010100001001000011"
 static string tobit(string myString){
 	string bit;
 	for (size_t i = 0; i < myString.size(); ++i)
@@ -16,7 +22,8 @@ static string tobit(string myString){
 static string hextobit(unsigned long H){//16bits hex to bin with zero padding
 	return bitset<32>(H).to_string();
 }
-
+//bintohex function converts any string-wise bit representation into it's string-wise hex representation:
+// "11111111" returns "FF"
 static string bintohex(const string &s){
     string out;
     for(uint i = 0; i < s.size(); i += 4){
@@ -35,7 +42,8 @@ static string bintohex(const string &s){
 
     return out;
 }
-
+//string-wise binary XOR gate:
+// "1","1" returns "0"
 static string bxor(string str1, string str2){
 	string myXor="";
 	string lng = str1;
@@ -65,6 +73,8 @@ static string bxor(string str1, string str2){
 	return myXor;
 }
 
+//trim all forestanding 0s in a string-wise bit:
+//"0000101" returns "101"
 static string shave(string str){
 	string temp=str;
 	while(temp[0]=='0' && temp.length()>1){
@@ -73,6 +83,8 @@ static string shave(string str){
 	return temp;
 }
 
+//add zeros to left of a string until wanted length reached:
+// "101",5 returns "00101"
 static string grow(string str, int n){
 	if(str.length()>n){
 		cout<<str<<" is longer than "<<n<<endl;
@@ -84,7 +96,8 @@ static string grow(string str, int n){
 		}
 	return temp;
 }
-
+//just the complementary of a bin (0s become 1s and vice versa):
+//"101" returns "010"
 static string complement(string str){
 	string temp="";
 	for(int i =0;i<str.length();i++){
@@ -97,7 +110,8 @@ static string complement(string str){
 	return temp;
 }
 
-
+//binary OR gate:
+// "1","1" returns "1"
 static string bor(string str1, string str2){
 	string myret="";
 	string lng = str1;
@@ -126,7 +140,8 @@ static string bor(string str1, string str2){
 	}
 	return myret;
 }
-
+//bin AND gate
+//tis just but an and gate come on
 static string band(string str1, string str2){
 	string myret="";
 	string lng = str1;
@@ -156,6 +171,8 @@ static string band(string str1, string str2){
 	return myret;
 }
 
+//string-wise binary + operator:
+//"1", "1" returns "10"
 static string bplus(string str1, string str2){
 	string myret="";
 	string lng = str1;
@@ -204,6 +221,8 @@ static string bplus(string str1, string str2){
 	return myret;
 }
 
+//base 2 modulus operator:
+//equivalent to trimming the begining of string: "10011",2 returns "11"
 static string bmod(string str, int n){
 	if(str.length()<n){
 		cout<<str<<" is shorter than "<<n<<endl;
@@ -213,6 +232,13 @@ static string bmod(string str, int n){
 	return temp;
 }
 
+
+/*=======================
+	SECTION 2 :
+=======================*/
+
+//reverse string
+//"1011" returns "1101"
 static string breverse(string str){
 	string ret=str;
 	for(int i=0;i<str.length();i++){
@@ -220,7 +246,8 @@ static string breverse(string str){
 	}
 	return ret;
 }
-
+//left-wise bit shifting (sounds cool, huh?)
+//sliiiiide to the left, add 0 to the right, criss cross! "11101",2 returns "10100"
 static string lbshift(string str, int n){
 	string temp=str;
 	for(int i=0;i<n;i++){
@@ -228,7 +255,7 @@ static string lbshift(string str, int n){
 	}
 	return temp;
 }
-
+//same as above but other way
 static string rbshift(string str, int n){
 	string temp=breverse(str);
 	for(int i=0;i<n;i++){
@@ -237,36 +264,47 @@ static string rbshift(string str, int n){
 	return breverse(temp);
 }
 
+//right rotation of bit:
+//see it like that : "1234",2 returns "3412"
 static string rrot(string str, int n){
 	return (bor(rbshift(str,n),lbshift(str,str.length()-n)));
 }
 
+//str1 decides whether to pick value from str2 or str3 (if str1[i]=='1' then we add str2[i] to return string, else we add str3[i]... or the other way around try it and tell me):
+//"1110","0000","1111" returns
 static string choice(string str1, string str2,string str3 ){
 	return bxor(band(str1,str2),band(complement(str1),str3));
 }
 
+//majority function (add to the return most represented bit of all three str1[i],str2[i],str3[i]):
+//"111","110","100" returns "110"
 static string maj(string str1, string str2,string str3 ){
 	return bxor(bxor(band(str1,str2),band(str1,str3)),band(str2,str3));
 }
 
+//SIGMA 0 sha function, does random sha-stuff 
 static string SIG0(string str){
 	return bxor(bxor(rrot(str,2),rrot(str,13)),rrot(str,22));
 }
 
+//same, you can google it
 static string SIG1(string str){
 	return bxor(bxor(rrot(str,6),rrot(str,11)),rrot(str,25));
 }
 
+//nothing to see, it shuffles and mixes stuff
 static string sig0(string str){
 	return bxor(bxor(rrot(str,7),rrot(str,18)),rbshift(str,3));
 }
 
+//same with other params
 static string sig1(string str){
 	return bxor(bxor(rrot(str,17),rrot(str,19)),rbshift(str,10));
 }
 
 // MESSAGE COMPLETION
 
+//get the amounts of zeros to add after input message to get to one or more 512 bits blocks (sort of 512-modulus of input length and stuff)
 static int STRINGnum0(string str){
 	int l = str.length()*8;//bitwise, "abc" is 3x8bit (3 octets/bytes)
 	int k =(448-l-1)%512;
@@ -276,6 +314,7 @@ static int STRINGnum0(string str){
 	return k;
 }
 
+//same but without whole text as input, just length of input text
 static int num0(int l){
 	int k =(448-l-1)%512;
 	if(k<0){
@@ -284,6 +323,13 @@ static int num0(int l){
 	return k;
 }
 
+
+/*=======================
+	SECTION 3 :
+=======================*/
+
+//converts input string into it's string-wise bit rep, formatted into 512 bit-long blocks with encoded at the very end the length of original message
+//MOCK EXAMPLE : "Hey Alice" returns something like "10111011010100000...0001010" of length multiple of 512, where the start is the message and the end is it's length
 static string bourage(string str){
 	string ret = tobit(str);
 	int len = ret.length();
@@ -310,6 +356,7 @@ static string bourage(string str){
 	return ret;
 }
 
+//That's it, the actual SHA code! based on constants k and H that are here hard coded. 
 static string myhash(string str){
 	string myM = bourage(str);
 	
